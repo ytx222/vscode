@@ -10,11 +10,18 @@ import * as fs from 'fs';
 import * as https from 'https';
 import * as path from 'path';
 import { DebianArchString } from './types';
-import * as util from '../../lib/util';
 
 // Based on https://source.chromium.org/chromium/chromium/src/+/main:build/linux/sysroot_scripts/install-sysroot.py.
 const URL_PREFIX = 'https://msftelectron.blob.core.windows.net';
 const URL_PATH = 'sysroots/toolchain';
+
+const root = path.dirname(path.dirname(path.dirname(__dirname)));
+
+function getElectronVersion(): string {
+	const yarnrc = fs.readFileSync(path.join(root, '.yarnrc'), 'utf8');
+	const target = /^target "(.*)"$/m.exec(yarnrc)![1];
+	return target;
+}
 
 function getSha(filename: fs.PathLike): string {
 	const hash = createHash('sha1');
@@ -38,7 +45,7 @@ type SysrootDictEntry = {
 };
 
 export async function getSysroot(arch: DebianArchString): Promise<string> {
-	const sysrootJSONUrl = `https://raw.githubusercontent.com/electron/electron/v${util.getElectronVersion().electronVersion}/script/sysroots.json`;
+	const sysrootJSONUrl = `https://raw.githubusercontent.com/electron/electron/v${getElectronVersion()}/script/sysroots.json`;
 	const sysrootDictLocation = `${tmpdir()}/sysroots.json`;
 	const result = spawnSync('curl', [sysrootJSONUrl, '-o', sysrootDictLocation]);
 	if (result.status !== 0) {
