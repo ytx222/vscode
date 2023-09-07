@@ -93,7 +93,7 @@ for (let dir of dirs) {
 
 	let opts;
 
-	if (/^(.build\/distro\/npm\/)?remote$/.test(dir)) {
+	if (/^(.build\/distro\/npm\/)?remote$/.test(dir) && process.env['npm_config_arch'] !== 'arm') {
 		// node modules used by vscode server
 		const env = { ...process.env };
 		if (process.env['VSCODE_REMOTE_CC']) { env['CC'] = process.env['VSCODE_REMOTE_CC']; }
