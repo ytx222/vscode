@@ -34,8 +34,8 @@ if [ "$npm_config_arch" == "x64" ]; then
   export VSCODE_REMOTE_CXX=$(which g++)
 elif [ "$npm_config_arch" == "arm64" ]; then
   # Set compiler toolchain
-  export CC=/usr/bin/aarch64-linux-gnu-gcc-10
-  export CXX=/usr/bin/aarch64-linux-gnu-g++-10
+  export CC=/usr/bin/aarch64-linux-gnu-gcc-8
+  export CXX=/usr/bin/aarch64-linux-gnu-g++-8
   export LD=/usr/bin/aarch64-linux-gnu-ld
   export AR=/usr/bin/aarch64-linux-gnu-ar
   export AS=/usr/bin/aarch64-linux-gnu-as
@@ -43,8 +43,8 @@ elif [ "$npm_config_arch" == "arm64" ]; then
   export LDFLAGS="--sysroot=$PWD/.build/sysroots/debian_bullseye_arm64-sysroot"
 elif [ "$npm_config_arch" == "arm" ]; then
   # Set compiler toolchain
-  export CC=/usr/bin/arm-linux-gnueabihf-gcc-10
-  export CXX=/usr/bin/arm-linux-gnueabihf-g++-10
+  export CC=/usr/bin/arm-linux-gnueabihf-gcc-8
+  export CXX=/usr/bin/arm-linux-gnueabihf-g++-8
   export LD=/usr/bin/arm-linux-gnueabihf-ld
   export AR=/usr/bin/arm-linux-gnueabihf-ar
   export AS=/usr/bin/arm-linux-gnueabihf-as

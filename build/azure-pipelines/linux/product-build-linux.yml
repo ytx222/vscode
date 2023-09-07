@@ -50,11 +50,11 @@ steps:
         xvfb \
         libgtk-3-0 \
         libgbm1 \
-        gcc-10-aarch64-linux-gnu \
-        g++-10-aarch64-linux-gnu \
+        gcc-8-aarch64-linux-gnu \
+        g++-8-aarch64-linux-gnu \
         binutils-aarch64-linux-gnu \
-        gcc-10-arm-linux-gnueabihf \
-        g++-10-arm-linux-gnueabihf \
+        gcc-8-arm-linux-gnueabihf \
+        g++-8-arm-linux-gnueabihf \
         binutils-arm-linux-gnueabihf
       # Start X server
       sudo cp build/azure-pipelines/linux/xvfb.init /etc/init.d/xvfb
