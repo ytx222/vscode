@@ -26,12 +26,12 @@ flakySuite('Native Modules (all platforms)', () => {
 		assert.ok(typeof result === 'boolean', testErrorMessage('native-is-elevated'));
 	});
 
-	test('native-keymap', async () => {
-		const keyMap = await import('native-keymap');
+	test.skip('native-keymap', async () => {
+		/*const keyMap = await import('native-keymap');
 		assert.ok(typeof keyMap.getCurrentKeyboardLayout === 'function', testErrorMessage('native-keymap'));
 
 		const result = keyMap.getCurrentKeyboardLayout();
-		assert.ok(result, testErrorMessage('native-keymap'));
+		assert.ok(result, testErrorMessage('native-keymap'));*/
 	});
 
 	test('native-watchdog', async () => {

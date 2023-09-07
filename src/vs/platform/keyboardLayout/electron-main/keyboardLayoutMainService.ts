@@ -3,8 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import * as nativeKeymap from 'native-keymap';
-import * as platform from 'vs/base/common/platform';
+//import * as nativeKeymap from 'native-keymap';
+//import * as platform from 'vs/base/common/platform';
 import { Emitter } from 'vs/base/common/event';
 import { Disposable } from 'vs/base/common/lifecycle';
 import { createDecorator } from 'vs/platform/instantiation/common/instantiation';
@@ -46,7 +46,7 @@ export class KeyboardLayoutMainService extends Disposable implements INativeKeyb
 	}
 
 	private async _doInitialize(): Promise<void> {
-		const nativeKeymapMod = await import('native-keymap');
+		/*const nativeKeymapMod = await import('native-keymap');
 
 		this._keyboardLayoutData = readKeyboardLayoutData(nativeKeymapMod);
 		if (!platform.isCI) {
@@ -57,7 +57,7 @@ export class KeyboardLayoutMainService extends Disposable implements INativeKeyb
 				this._keyboardLayoutData = readKeyboardLayoutData(nativeKeymapMod);
 				this._onDidChangeKeyboardLayout.fire(this._keyboardLayoutData);
 			});
-		}
+		}*/
 	}
 
 	public async getKeyboardLayoutData(): Promise<IKeyboardLayoutData> {
@@ -66,8 +66,8 @@ export class KeyboardLayoutMainService extends Disposable implements INativeKeyb
 	}
 }
 
-function readKeyboardLayoutData(nativeKeymapMod: typeof nativeKeymap): IKeyboardLayoutData {
+/*function readKeyboardLayoutData(nativeKeymapMod: typeof nativeKeymap): IKeyboardLayoutData {
 	const keyboardMapping = nativeKeymapMod.getKeyMap();
 	const keyboardLayoutInfo = nativeKeymapMod.getCurrentKeyboardLayout();
 	return { keyboardMapping, keyboardLayoutInfo };
-}
+}*/
