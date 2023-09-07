@@ -48,7 +48,6 @@ export const referenceGeneratedDepsByArch = {
 		'libnss3 (>= 2:3.30)',
 		'libnss3 (>= 3.26)',
 		'libpango-1.0-0 (>= 1.14.0)',
-		'libx11-6',
 		'libx11-6 (>= 2:1.4.99.1)',
 		'libxcb1 (>= 1.9.2)',
 		'libxcomposite1 (>= 1:0.4.4-1)',
@@ -56,7 +55,6 @@ export const referenceGeneratedDepsByArch = {
 		'libxext6',
 		'libxfixes3',
 		'libxkbcommon0 (>= 0.4.1)',
-		'libxkbfile1',
 		'libxrandr2',
 		'xdg-utils (>= 1.0.2)'
 	],
@@ -90,7 +88,6 @@ export const referenceGeneratedDepsByArch = {
 		'libstdc++6 (>= 5)',
 		'libstdc++6 (>= 5.2)',
 		'libstdc++6 (>= 6)',
-		'libx11-6',
 		'libx11-6 (>= 2:1.4.99.1)',
 		'libxcb1 (>= 1.9.2)',
 		'libxcomposite1 (>= 1:0.4.4-1)',
@@ -98,7 +95,6 @@ export const referenceGeneratedDepsByArch = {
 		'libxext6',
 		'libxfixes3',
 		'libxkbcommon0 (>= 0.4.1)',
-		'libxkbfile1',
 		'libxrandr2',
 		'xdg-utils (>= 1.0.2)'
 	],
@@ -127,7 +123,6 @@ export const referenceGeneratedDepsByArch = {
 		'libstdc++6 (>= 5)',
 		'libstdc++6 (>= 5.2)',
 		'libstdc++6 (>= 6)',
-		'libx11-6',
 		'libx11-6 (>= 2:1.4.99.1)',
 		'libxcb1 (>= 1.9.2)',
 		'libxcomposite1 (>= 1:0.4.4-1)',
@@ -135,7 +130,6 @@ export const referenceGeneratedDepsByArch = {
 		'libxext6',
 		'libxfixes3',
 		'libxkbcommon0 (>= 0.4.1)',
-		'libxkbfile1',
 		'libxrandr2',
 		'xdg-utils (>= 1.0.2)'
 	]
