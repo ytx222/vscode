@@ -103,7 +103,6 @@ export const referenceGeneratedDepsByArch = {
 		'libutil.so.1(GLIBC_2.2.5)(64bit)',
 		'libxcb.so.1()(64bit)',
 		'libxkbcommon.so.0()(64bit)',
-		'libxkbfile.so.1()(64bit)',
 		'rpmlib(FileDigests) <= 4.6.0-1',
 		'rtld(GNU_HASH)',
 		'xdg-utils'
@@ -204,7 +203,6 @@ export const referenceGeneratedDepsByArch = {
 		'libutil.so.1(GLIBC_2.4)',
 		'libxcb.so.1',
 		'libxkbcommon.so.0',
-		'libxkbfile.so.1',
 		'rpmlib(FileDigests) <= 4.6.0-1',
 		'rtld(GNU_HASH)',
 		'xdg-utils'
@@ -295,7 +293,6 @@ export const referenceGeneratedDepsByArch = {
 		'libxcb.so.1()(64bit)',
 		'libxkbcommon.so.0()(64bit)',
 		'libxkbcommon.so.0(V_0.5.0)(64bit)',
-		'libxkbfile.so.1()(64bit)',
 		'rpmlib(FileDigests) <= 4.6.0-1',
 		'rtld(GNU_HASH)',
 		'xdg-utils'
