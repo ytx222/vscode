@@ -5,7 +5,11 @@ set -e
 # To workaround the issue of yarn not respecting the registry value from .npmrc
 yarn config set registry "$NPM_REGISTRY"
 
-if [ -z "$CC" ] || [ -z "$CXX" ]; then
+# Download sysroot from upstream electron releases
+VSCODE_SYSROOT_DIR=$PWD/.build/sysroots \
+node -e '(async () => { const { getSysroot } = require("./build/linux/debian/install-sysroot.js"); await getSysroot("amd64"); await getSysroot("arm64"); await getSysroot("arm"); })()'
+
+if [ "$npm_config_arch" == "x64" ]; then
   # Download clang based on chromium revision used by vscode
   curl -s https://raw.githubusercontent.com/chromium/chromium/114.0.5735.199/tools/clang/scripts/update.py | python - --output-dir=$PWD/.build/CR_Clang --host-os=linux
 
@@ -16,10 +20,6 @@ if [ -z "$CC" ] || [ -z "$CXX" ]; then
   VSCODE_LIBCXXABI_HEADERS_DIR=$PWD/.build/libcxxabi_headers \
   VSCODE_ARCH="$npm_config_arch" \
   node build/linux/libcxx-fetcher.js
-
-  # Download sysroot from upstream electron releases
-  VSCODE_SYSROOT_DIR=$PWD/.build/sysroots \
-  node -e '(async () => { const { getSysroot } = require("./build/linux/debian/install-sysroot.js"); await getSysroot("amd64"); })()'
 
   # Set compiler toolchain
   # Flags for the client build are based on
@@ -32,7 +32,26 @@ if [ -z "$CC" ] || [ -z "$CXX" ]; then
   export LDFLAGS="-stdlib=libc++ --sysroot=$PWD/.build/sysroots/debian_bullseye_amd64-sysroot -fuse-ld=lld -flto=thin -L$PWD/.build/libcxx-objects -lc++abi -Wl,--lto-O0"
   export VSCODE_REMOTE_CC=$(which gcc)
   export VSCODE_REMOTE_CXX=$(which g++)
+elif [ "$npm_config_arch" == "arm64" ]; then
+  # Set compiler toolchain
+  export CC=/usr/bin/aarch64-linux-gnu-gcc-10
+  export CXX=/usr/bin/aarch64-linux-gnu-g++-10
+  export LD=/usr/bin/aarch64-linux-gnu-ld
+  export AR=/usr/bin/aarch64-linux-gnu-ar
+  export AS=/usr/bin/aarch64-linux-gnu-as
+  export CXXFLAGS="--sysroot=$PWD/.build/sysroots/debian_bullseye_arm64-sysroot"
+  export LDFLAGS="--sysroot=$PWD/.build/sysroots/debian_bullseye_arm64-sysroot"
+elif [ "$npm_config_arch" == "arm" ]; then
+  # Set compiler toolchain
+  export CC=/usr/bin/arm-linux-gnueabihf-gcc-10
+  export CXX=/usr/bin/arm-linux-gnueabihf-g++-10
+  export LD=/usr/bin/arm-linux-gnueabihf-ld
+  export AR=/usr/bin/arm-linux-gnueabihf-ar
+  export AS=/usr/bin/arm-linux-gnueabihf-as
+  export CXXFLAGS="--sysroot=$PWD/.build/sysroots/debian_bullseye_arm-sysroot"
+  export LDFLAGS="--sysroot=$PWD/.build/sysroots/debian_bullseye_arm-sysroot"
 fi
+
 
 for i in {1..5}; do # try 5 times
   yarn --frozen-lockfile --check-files && break
