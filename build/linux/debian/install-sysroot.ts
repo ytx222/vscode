@@ -49,7 +49,7 @@ export async function getSysroot(arch: DebianArchString): Promise<string> {
 	const sysrootDict: SysrootDictEntry = sysrootInfo[sysrootArch];
 	const tarballFilename = sysrootDict['Tarball'];
 	const tarballSha = sysrootDict['Sha1Sum'];
-	const sysroot = path.join(tmpdir(), sysrootDict['SysrootDir']);
+	const sysroot = path.join(process.env['VSCODE_SYSROOT_DIR'] ?? tmpdir(), sysrootDict['SysrootDir']);
 	const url = [URL_PREFIX, URL_PATH, tarballSha, tarballFilename].join('/');
 	const stamp = path.join(sysroot, '.stamp');
 	if (fs.existsSync(stamp) && fs.readFileSync(stamp).toString() === url) {
@@ -58,7 +58,7 @@ export async function getSysroot(arch: DebianArchString): Promise<string> {
 
 	console.log(`Installing Debian ${arch} root image: ${sysroot}`);
 	fs.rmSync(sysroot, { recursive: true, force: true });
-	fs.mkdirSync(sysroot);
+	fs.mkdirSync(sysroot, { recursive: true });
 	const tarball = path.join(sysroot, tarballFilename);
 	console.log(`Downloading ${url}`);
 	let downloadSuccess = false;

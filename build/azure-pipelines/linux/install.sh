@@ -17,6 +17,10 @@ if [ -z "$CC" ] || [ -z "$CXX" ]; then
   VSCODE_ARCH="$npm_config_arch" \
   node build/linux/libcxx-fetcher.js
 
+  # Download sysroot from upstream electron releases
+  VSCODE_SYSROOT_DIR=$PWD/.build/sysroots \
+  node -e '(async () => { const { getSysroot } = require("./build/linux/debian/install-sysroot.js"); await getSysroot("amd64"); })()'
+
   # Set compiler toolchain
   # Flags for the client build are based on
   # https://source.chromium.org/chromium/chromium/src/+/refs/tags/114.0.5735.199:build/config/arm.gni
@@ -24,8 +28,8 @@ if [ -z "$CC" ] || [ -z "$CXX" ]; then
   # https://source.chromium.org/chromium/chromium/src/+/refs/tags/114.0.5735.199:build/config/c++/BUILD.gn
   export CC=$PWD/.build/CR_Clang/bin/clang
   export CXX=$PWD/.build/CR_Clang/bin/clang++
-  export CXXFLAGS="-nostdinc++ -D__NO_INLINE__ -I$PWD/.build/libcxx_headers -isystem$PWD/.build/libcxx_headers/include -isystem$PWD/.build/libcxxabi_headers/include -fPIC -flto=thin -fsplit-lto-unit -D_LIBCPP_ABI_NAMESPACE=Cr"
-  export LDFLAGS="-stdlib=libc++ -fuse-ld=lld -flto=thin -L$PWD/.build/libcxx-objects -lc++abi -Wl,--lto-O0"
+  export CXXFLAGS="-nostdinc++ -D__NO_INLINE__ -I$PWD/.build/libcxx_headers -isystem$PWD/.build/libcxx_headers/include -isystem$PWD/.build/libcxxabi_headers/include -fPIC -flto=thin -fsplit-lto-unit -D_LIBCPP_ABI_NAMESPACE=Cr --sysroot=$PWD/.build/sysroots/debian_bullseye_amd64-sysroot"
+  export LDFLAGS="-stdlib=libc++ --sysroot=$PWD/.build/sysroots/debian_bullseye_amd64-sysroot -fuse-ld=lld -flto=thin -L$PWD/.build/libcxx-objects -lc++abi -Wl,--lto-O0"
   export VSCODE_REMOTE_CC=$(which gcc)
   export VSCODE_REMOTE_CXX=$(which g++)
 fi

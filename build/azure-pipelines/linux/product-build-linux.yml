@@ -110,41 +110,67 @@ steps:
       condition: and(succeeded(), ne(variables.NODE_MODULES_RESTORED, 'true'))
 
   - ${{ if ne(parameters.VSCODE_QUALITY, 'oss') }}:
-    - script: |
-        set -e
+    - ${{ if eq(parameters.VSCODE_ARCH, 'x64') }}:
+      - script: |
+          set -e
 
-        for i in {1..5}; do # try 5 times
-          yarn --cwd build --frozen-lockfile --check-files && break
-          if [ $i -eq 3 ]; then
-            echo "Yarn failed too many times" >&2
-            exit 1
-          fi
-          echo "Yarn failed $i, trying again..."
-        done
+          for i in {1..5}; do # try 5 times
+            yarn --cwd build --frozen-lockfile --check-files && break
+            if [ $i -eq 3 ]; then
+              echo "Yarn failed too many times" >&2
+              exit 1
+            fi
+            echo "Yarn failed $i, trying again..."
+          done
 
-        docker run -e GITHUB_TOKEN -e npm_config_arch -e NPM_REGISTRY \
-        -e VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME -e VSCODE_HOST_MOUNT \
-        -e ELECTRON_SKIP_BINARY_DOWNLOAD -e PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD \
-        -e VSCODE_SKIP_NODE_VERSION_CHECK \
-        -v /mnt/vss/_work/1/s:/home/builduser/vscode -v /mnt/vss/_work/1/s/.build/.netrc:/home/builduser/.netrc \
-        -v /var/run/docker.sock:/var/run/docker.sock \
-        -u 1000:1000 \
-        -w /home/builduser/vscode vscodehub.azurecr.io/vscode-linux-build-agent:bionic-$(VSCODE_ARCH) \
-        /bin/bash -c "./build/azure-pipelines/linux/install.sh"
+          ./build/azure-pipelines/linux/install.sh
+        env:
+          npm_config_arch: $(NPM_ARCH)
+          NPM_REGISTRY: "$(NPM_REGISTRY)"
+          ELECTRON_SKIP_BINARY_DOWNLOAD: 1
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+          GITHUB_TOKEN: "$(github-distro-mixin-password)"
+          VSCODE_HOST_MOUNT: "/mnt/vss/_work/1/s"
+          VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME: vscodehub.azurecr.io/vscode-linux-build-agent:centos7-devtoolset8-x64
+        displayName: Install dependencies
+        condition: and(succeeded(), ne(variables.NODE_MODULES_RESTORED, 'true'))
 
-        sudo chown -R $USER:$USER /mnt/vss/_work/1/s
-      env:
-        npm_config_arch: $(NPM_ARCH)
-        NPM_REGISTRY: "$(NPM_REGISTRY)"
-        ELECTRON_SKIP_BINARY_DOWNLOAD: 1
-        PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
-        VSCODE_SKIP_NODE_VERSION_CHECK: 1
-        GITHUB_TOKEN: "$(github-distro-mixin-password)"
-        VSCODE_HOST_MOUNT: "/mnt/vss/_work/1/s"
-        ${{ if or(eq(parameters.VSCODE_ARCH, 'x64'), eq(parameters.VSCODE_ARCH, 'arm64')) }}:
-          VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME: vscodehub.azurecr.io/vscode-linux-build-agent:centos7-devtoolset8-$(VSCODE_ARCH)
-      displayName: Install dependencies
-      condition: and(succeeded(), ne(variables.NODE_MODULES_RESTORED, 'true'))
+    - ${{ else }}:
+      - script: |
+          set -e
+
+          for i in {1..5}; do # try 5 times
+            yarn --cwd build --frozen-lockfile --check-files && break
+            if [ $i -eq 3 ]; then
+              echo "Yarn failed too many times" >&2
+              exit 1
+            fi
+            echo "Yarn failed $i, trying again..."
+          done
+
+          docker run -e GITHUB_TOKEN -e npm_config_arch -e NPM_REGISTRY \
+          -e VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME -e VSCODE_HOST_MOUNT \
+          -e ELECTRON_SKIP_BINARY_DOWNLOAD -e PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD \
+          -e VSCODE_SKIP_NODE_VERSION_CHECK \
+          -v /mnt/vss/_work/1/s:/home/builduser/vscode -v /mnt/vss/_work/1/s/.build/.netrc:/home/builduser/.netrc \
+          -v /var/run/docker.sock:/var/run/docker.sock \
+          -u 1000:1000 \
+          -w /home/builduser/vscode vscodehub.azurecr.io/vscode-linux-build-agent:bionic-$(VSCODE_ARCH) \
+          /bin/bash -c "./build/azure-pipelines/linux/install.sh"
+
+          sudo chown -R $USER:$USER /mnt/vss/_work/1/s
+        env:
+          npm_config_arch: $(NPM_ARCH)
+          NPM_REGISTRY: "$(NPM_REGISTRY)"
+          ELECTRON_SKIP_BINARY_DOWNLOAD: 1
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+          VSCODE_SKIP_NODE_VERSION_CHECK: 1
+          GITHUB_TOKEN: "$(github-distro-mixin-password)"
+          VSCODE_HOST_MOUNT: "/mnt/vss/_work/1/s"
+          ${{ if or(eq(parameters.VSCODE_ARCH, 'x64'), eq(parameters.VSCODE_ARCH, 'arm64')) }}:
+            VSCODE_REMOTE_DEPENDENCIES_CONTAINER_NAME: vscodehub.azurecr.io/vscode-linux-build-agent:centos7-devtoolset8-$(VSCODE_ARCH)
+        displayName: Install dependencies
+        condition: and(succeeded(), ne(variables.NODE_MODULES_RESTORED, 'true'))
 
     - script: node build/azure-pipelines/distro/mixin-npm
       condition: and(succeeded(), ne(variables.NODE_MODULES_RESTORED, 'true'))
