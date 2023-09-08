@@ -7,7 +7,7 @@ yarn config set registry "$NPM_REGISTRY"
 
 # Download sysroot from upstream electron releases
 VSCODE_SYSROOT_DIR=$PWD/.build/sysroots \
-node -e '(async () => { const { getSysroot } = require("./build/linux/debian/install-sysroot.js"); await getSysroot("amd64"); await getSysroot("arm64"); await getSysroot("arm"); })()'
+node -e '(async () => { const { getSysroot } = require("./build/linux/debian/install-sysroot.js"); await getSysroot(process.env["npm_config_arch"]); })()'
 
 if [ "$npm_config_arch" == "x64" ]; then
   # Download clang based on chromium revision used by vscode

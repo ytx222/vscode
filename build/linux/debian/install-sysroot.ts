@@ -52,7 +52,15 @@ export async function getSysroot(arch: DebianArchString): Promise<string> {
 		throw new Error('Cannot retrieve sysroots.json. Stderr:\n' + result.stderr);
 	}
 	const sysrootInfo = require(sysrootDictLocation);
-	const sysrootArch = arch === 'armhf' ? 'bullseye_arm' : `bullseye_${arch}`;
+	let sysrootArch = `bullseye_${arch}`;
+	switch (arch as string) {
+		case 'armhf':
+			sysrootArch = 'bullseye_arm';
+			break;
+		case 'x64':
+			sysrootArch = 'bullseye_amd64';
+			break;
+	}
 	const sysrootDict: SysrootDictEntry = sysrootInfo[sysrootArch];
 	const tarballFilename = sysrootDict['Tarball'];
 	const tarballSha = sysrootDict['Sha1Sum'];
