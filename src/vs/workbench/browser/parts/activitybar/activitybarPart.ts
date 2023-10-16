@@ -39,6 +39,7 @@ import { IPaneCompositePartService } from 'vs/workbench/services/panecomposite/b
 import { TitleBarVisibleContext } from 'vs/workbench/common/contextkeys';
 import { IExtensionService } from 'vs/workbench/services/extensions/common/extensions';
 import { IWorkbenchEnvironmentService } from 'vs/workbench/services/environment/common/environmentService';
+import { IExtensionBisectService } from 'vs/workbench/services/extensionManagement/browser/extensionBisect';
 
 export class ActivitybarPart extends Part {
 
@@ -178,17 +179,18 @@ export class ActivityBarCompositeBar extends PaneCompositeBar {
 		@IViewDescriptorService viewDescriptorService: IViewDescriptorService,
 		@IContextKeyService contextKeyService: IContextKeyService,
 		@IWorkbenchEnvironmentService environmentService: IWorkbenchEnvironmentService,
+		@IExtensionBisectService extensionBisectService: IExtensionBisectService,
 		@IConfigurationService private readonly configurationService: IConfigurationService,
 		@IMenuService private readonly menuService: IMenuService,
 		@IWorkbenchLayoutService private readonly layoutService: IWorkbenchLayoutService,
 	) {
-		options = {
+		super({
 			...options,
 			fillExtraContextMenuActions: (actions, e) => {
 				this.fillContextMenuActions(actions, e);
+				options.fillExtraContextMenuActions(actions, e);
 			}
-		};
-		super(options, part, paneCompositePart, instantiationService, storageService, extensionService, viewDescriptorService, contextKeyService, environmentService);
+		}, part, paneCompositePart, instantiationService, storageService, extensionService, extensionBisectService, viewDescriptorService, contextKeyService, environmentService);
 
 		if (showGlobalActivities) {
 			this.globalCompositeBar = this._register(instantiationService.createInstance(GlobalCompositeBar, () => this.getContextMenuActions(), (theme: IColorTheme) => this.options.colors(theme), this.options.activityHoverOptions));
