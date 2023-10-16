@@ -359,3 +359,20 @@ steps:
         artifact: $(ARTIFACT_PREFIX)vscode_client_win32_$(VSCODE_ARCH)_user-setup
         condition: and(succeededOrFailed(), ne(variables['USER_SETUP_PATH'], ''))
         displayName: Publish user setup
+
+    - powershell: |
+        echo (Get-Command az).Source
+        echo (Get-Command nuget).Source
+        echo (Get-Command dotnet).Source
+        echo (Get-Command tar).Source
+        echo (Get-Command cl).Source
+        echo (Get-Command link).Source
+        echo (Get-Command msbuild).Source
+        az --version
+        nuget --version
+        dotnet --version
+        tar --version
+        msbuild --version
+        cl
+        link
+      displayName: Print versions
