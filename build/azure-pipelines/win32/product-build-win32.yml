@@ -361,18 +361,19 @@ steps:
         displayName: Publish user setup
 
     - powershell: |
-        echo (Get-Command az).Source
-        echo (Get-Command nuget).Source
-        echo (Get-Command dotnet).Source
-        echo (Get-Command tar).Source
-        echo (Get-Command cl).Source
-        echo (Get-Command link).Source
-        echo (Get-Command msbuild).Source
-        az --version
-        nuget --version
-        dotnet --version
-        tar --version
-        msbuild --version
-        cl
-        link
+        echo (Get-Command az).Source || true
+        echo (Get-Command nuget).Source || true
+        echo (Get-Command dotnet).Source || true
+        echo (Get-Command tar).Source || true
+        echo (Get-Command msbuild).Source || true
+        az --version || true
+        nuget --version || true
+        dotnet --version || true
+        tar --version || true
+        msbuild --version || true
+        az || true
+        nuget || true
+        dotnet || true
+        msbuild || true
       displayName: Print versions
+      continueOnError: true
