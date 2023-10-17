@@ -360,7 +360,7 @@ steps:
         condition: and(succeededOrFailed(), ne(variables['USER_SETUP_PATH'], ''))
         displayName: Publish user setup
 
-    - powershell: |
+    - pwsh: |
         echo (Get-Command az).Source || true
         echo (Get-Command nuget).Source || true
         echo (Get-Command dotnet).Source || true
