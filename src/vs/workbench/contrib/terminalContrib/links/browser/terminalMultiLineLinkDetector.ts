@@ -34,6 +34,7 @@ const lineNumberPrefixMatchers = [
 	//   /some/file
 	//     16:5  error ...
 	/^ *(?<link>(?<line>\d+):(?<col>\d+)?)/
+	// add this?
 ];
 
 const gitDiffMatchers = [
@@ -41,6 +42,7 @@ const gitDiffMatchers = [
 	// +++ b/some/file
 	// @@ -8,11 +8,11 @@ file content...
 	/^(?<link>@@ .+ \+(?<toFileLine>\d+),(?<toFileCount>\d+) @@)/
+
 ];
 
 export class TerminalMultiLineLinkDetector implements ITerminalLinkDetector {
